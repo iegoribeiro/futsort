@@ -11,7 +11,7 @@
 .fixed-bar {
   background-color: #27AE60;
   overflow: hidden;
-  box-shadow: 0 0 3px #fff;
+  box-shadow: 0 0 2px 2px #555;
 }
 
 .title-futsort{
