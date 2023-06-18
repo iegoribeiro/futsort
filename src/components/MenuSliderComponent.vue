@@ -25,8 +25,8 @@ nav.menu {
   display: flex;
   align-items: center;
   text-align: center;
-  width: 390px;
-  min-width: 390px;
+  width: 360px;
+  min-width: 360px;
   height: 40px;
   margin: 20px;
   background-color: #27AE60;
@@ -51,7 +51,7 @@ nav.menu {
 .menu-slide {
   position: absolute;
   height: 100%;
-  width: 130px;
+  width: 120px;
   top: 0;
   left: 0;
   background: #f0f0f0da;
@@ -66,11 +66,11 @@ nav.menu {
   opacity: 1;
 }
 .menu-item:nth-child(2).router-link-active ~ .menu-slide {
-  left: 130px;
+  left: 120px;
   opacity: 1;
 }
 .menu-item:nth-child(3).router-link-active ~ .menu-slide {
-  left: 260px;
+  left: 240px;
   opacity: 1;
 }
 </style>
