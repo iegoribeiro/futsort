@@ -26,6 +26,7 @@ nav.menu {
   align-items: center;
   text-align: center;
   width: 390px;
+  min-width: 390px;
   height: 40px;
   margin: 20px;
   background-color: #27AE60;

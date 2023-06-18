@@ -11,14 +11,11 @@ import FixedBar from './components/FixedBar.vue'
     <MenuSliderComponent></MenuSliderComponent>
   </header>
   
-  <RouterView />
-  <!-- <ExemploComponent /> -->
+  <div class="content">
+    <RouterView />
+  </div>
 
 </template>
 
 <style scoped>
-header {
-  text-align: center;
-}
-
 </style>
