@@ -1,1 +1,0 @@
-import{_ as e,o as n,c as s,a as c}from"./index-a0d995f1.js";const o={},t=c("div",null,"This is an admin page",-1),a=[t];function _(i,r){return n(),s("div",null,a)}const l=e(o,[["render",_]]);export{l as default};

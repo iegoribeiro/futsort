@@ -54,7 +54,7 @@ nav.menu {
   width: 120px;
   top: 0;
   left: 0;
-  background: #f0f0f0da;
+  background: #fff;
   z-index: 1;
   transition: 0.5s;
   opacity: 0;
