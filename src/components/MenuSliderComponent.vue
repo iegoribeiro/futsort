@@ -18,6 +18,7 @@ import { RouterLink } from 'vue-router'
 .navbar {
   display: flex;
   justify-content: center;
+  margin-bottom: 5px;
 }
 
 nav.menu {
@@ -25,9 +26,9 @@ nav.menu {
   display: flex;
   align-items: center;
   text-align: center;
-  width: 360px;
-  min-width: 360px;
-  height: 40px;
+  width: 330px;
+  min-width: 330px;
+  height: 35px;
   margin: 20px;
   background-color: #27AE60;
   border-radius: 30px;
@@ -36,12 +37,13 @@ nav.menu {
 }
 
 .menu .menu-item {
-  width: 130px;
+  width: 110px;
   font-weight: 500;
   color: #fff;
   transition: 0.5s;
   text-decoration: none;
   z-index: 2;
+  padding-left: 2px;
 }
 
 .menu-item.router-link-active {
@@ -51,7 +53,7 @@ nav.menu {
 .menu-slide {
   position: absolute;
   height: 100%;
-  width: 120px;
+  width: 110px;
   top: 0;
   left: 0;
   background: #fff;
@@ -66,11 +68,11 @@ nav.menu {
   opacity: 1;
 }
 .menu-item:nth-child(2).router-link-active ~ .menu-slide {
-  left: 120px;
+  left: 110px;
   opacity: 1;
 }
 .menu-item:nth-child(3).router-link-active ~ .menu-slide {
-  left: 240px;
+  left: 220px;
   opacity: 1;
 }
 </style>

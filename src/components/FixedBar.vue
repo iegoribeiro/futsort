@@ -20,6 +20,6 @@
   font-weight: bold;
   color: #fff;
   letter-spacing: 0.08em;
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.25);
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.25);
 }
 </style>

@@ -1,8 +1,8 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue';
+import StarsLevelComponent from '../components/StarsLevelComponent.vue'
 
 const players = reactive([]);
-const bgPosition = ref('red')
 
 function togglePosition(player) {
   let positions = ["AT", "MC", "ZG"]
@@ -14,6 +14,11 @@ function getBgPosition(position) {
   if (position == "AT") return "#6754DE"
   if (position == "MC") return "#54DE72"
   if (position == "ZG") return "#DE9F54"
+}
+
+function addPlayer() {
+  players.push({"id":0,"paid":false,"name":"Jogador","monthly":true,"level":0,"position":"MC", "status":1});
+  players.sort((a, b) => a.id - b.id)
 }
 
 onMounted(() => {
@@ -29,7 +34,6 @@ onMounted(() => {
   )
 })
 
-
 </script>
 
 <template>
@@ -37,21 +41,19 @@ onMounted(() => {
     <div class="container">
       <div class="actions">
         <div class="filters"></div>
-        <div class="add-player"></div>
+        <div class="add-player">
+          <button @click="addPlayer()"><span>+</span>Jogador</button>
+        </div>
       </div>
 
       <div class="player-list" v-if="players.length > 0">
-        <div class="player" v-for="player in players">
-          <span class="p-paid" @click="player.paid = !player.paid" :style="{ backgroundColor: player.paid ? '#0E8B48' : '#DF3636' }" >$</span>
-          <span class="p-name"><input type="text" v-model="player.name" placeholder="player" /></span>
+        <div class="player" v-for="(player, index) in players" :key="player.id">
           <span class="p-monthly" @click="player.monthly = !player.monthly" :style="{ backgroundColor: player.monthly ? '#4E84EC' : '#EC4E4E' }" >{{ player.monthly ? 'MS' : 'AV' }} </span>
-          <span class="p-level">
-            <input type="radio" name="level" id="lvl1"><label for="lvl1"></label>
-            <input type="radio" name="level" id="lvl2"><label for="lvl2"></label>
-            <input type="radio" name="level" id="lvl3"><label for="lvl3"></label>
-            <input type="radio" name="level" id="lvl4"><label for="lvl4"></label>
-          </span>
+          <span class="p-paid" @click="player.paid = !player.paid" :style="{ backgroundColor: player.paid ? '#0E8B48' : '#DF3636' }">$</span>
+          <span class="p-name"><input type="text" v-model="player.name" placeholder="player" /></span>
+          <span class="p-level"><StarsLevelComponent :player="player"></StarsLevelComponent></span>
           <span class="p-position" @click="togglePosition(player)" :style="{ backgroundColor: getBgPosition(player.position) }" >{{ player.position }}</span>
+          <span class="p-remove" @click="players.splice(index,1)"><img src="../assets/icons/lixeira.png" alt="lixera" width="19"></span>
         </div>
       </div>
       <div v-else>Nenhum jogador cadastrado!</div>
@@ -62,85 +64,125 @@ onMounted(() => {
 
 <style scoped>
 
+/** BODY */
 main {
   display: flex;
   justify-content: center;
-  margin: 10px;
+  margin: -5px 10px 0 10px;
 }
 
 .container {
-  background: #E6E6E6;
-  padding: 10px;
-  max-width: 360px;
-  width: 360px;
+  width: 100%;
+  min-width: 300px;
+  max-width: 400px;
+  /* background: #E6E6E6; */
 }
 
+/** ADD E FILTROS */
 .actions {
-  height: 30px;
-  background: #FFF; /* TODO */
+  display: flex;
+  justify-content: space-between;
   margin-bottom: 10px;
+  /* border: 1px solid white; 
+  border-radius: 20px;  */
 }
 
-/** Listagem de Jogadores **/
+/** Add Jogador */
+
+.add-player button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  height: 35px;
+  padding: 0 10px;
+  cursor: pointer;
+  box-shadow: 1px 1px 2px #ababab;
+}
+.add-player button span {
+  font-size: 20px;
+  padding-right: 3px;
+}
+
+
+/** Listagem de Jogadores */
 
 .player {
   display: flex;
-  justify-content: space-around;
-  margin: 3px 0;
-  padding: 1px;
+  height: 35px;
+  margin: 5px 0;
+  padding: 3px;
   background: #fff;
   border-radius: 4px;
+  box-shadow: 1px 1px 2px #ababab;
 }
 
 .player span {
-  margin: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1px 3px;
+}
+
+/** Mensalista */
+.p-monthly {
+  min-width: 30px;
+  color: white;
+  font-weight: bold;
+  border-radius: 4px;
   cursor: pointer;
 }
 
 
-
-/** Listagem de Jogadores **/
-
 /** Pagamento */
 .p-paid {
-  width: 30px;
+  min-width: 30px;
   color: white;
   font-weight: bold;
   border-radius: 4px;
+  cursor: pointer;
 }
 
 /** Nome */
 .p-name {
-  width: 150px;
+  width: 100%;
+  min-width: 100px;
 }
 
 .p-name input {
   border: none;
-  background-color: #efefef;
-  border-radius: 4px;
-  height: 20px;
+  background-color: #f5f5f5;
+  border-radius: 25px;
   outline: none;
   width: inherit;
 }
 
-
-/** Mensalista */
-.p-monthly {
-  width: 30px;
+/** Posição */
+.p-position {
+  min-width: 30px;
   color: white;
   font-weight: bold;
   border-radius: 4px;
+  cursor: pointer;
 }
 
-/** Posição */
+/** Nível */
 .p-level {
-  width: 90px;
+  justify-content: space-evenly !important;
+  min-width: 90px;
 }
 
-/** Posição */
-.p-position {
-  width: 30px;
+/** Remover */
+.p-remove {
+  min-width: 10px;
+  font-weight: bold;
+  background: #f5f5f5;
+  padding: 0px 8px;
   border-radius: 4px;
+  cursor: pointer;
 }
 
 </style>
