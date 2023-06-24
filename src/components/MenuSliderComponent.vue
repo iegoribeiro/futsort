@@ -18,7 +18,7 @@ import { RouterLink } from 'vue-router'
 .navbar {
   display: flex;
   justify-content: center;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 
 nav.menu {

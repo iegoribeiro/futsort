@@ -21,6 +21,35 @@ function addPlayer() {
   players.sort((a, b) => a.id - b.id)
 }
 
+function removePlayer(index) {
+  //TODO ALERT!
+  players.splice(index,1);
+}
+
+const lastSorted = ref("name");
+const isDescending = ref(false);
+
+function orderList(attribute) {
+  if (attribute === lastSorted.value) {
+    isDescending.value = !isDescending.value;
+  } else {
+    lastSorted.value = attribute;
+    isDescending.value = false;
+  }
+
+  let sortOrder = isDescending.value ? -1 : 1;
+
+  return players.sort((a, b) => {
+    if (a[attribute] < b[attribute]) {
+      return -1 * sortOrder;
+    }
+    if (a[attribute] > b[attribute]) {
+      return 1 * sortOrder;
+    }
+    return 0;
+  });
+}
+
 onMounted(() => {
   players.push(
     {"id":1,"paid":true,"name":"Player1","monthly":true,"level":3,"position":"AT", "status":1},
@@ -30,8 +59,9 @@ onMounted(() => {
     {"id":5,"paid":false,"name":"Player5","monthly":true,"level":1,"position":"ZG", "status":1},
     {"id":6,"paid":true,"name":"Player6","monthly":true,"level":3,"position":"ZG", "status":1},
     {"id":7,"paid":false,"name":"Player7","monthly":true,"level":1,"position":"ZG", "status":-1},
-    {"id":8,"paid":true,"name":"Player8","monthly":true,"level":3,"position":"AT", "status":0},
+    {"id":8,"paid":true,"name":"Player8","monthly":true,"level":3,"position":"AT", "status":0}
   )
+  players.sort((a, b) => b.monthly - a.monthly)
 })
 
 </script>
@@ -40,7 +70,12 @@ onMounted(() => {
   <main>
     <div class="container">
       <div class="actions">
-        <div class="filters"></div>
+        <div class="filters">
+          <button @click="orderList('monthly')"><span>⇩</span>MS</button>
+          <button @click="orderList('name')"><span>⇩</span>NM</button>
+          <button @click="orderList('level')"><span>⇩</span>LV</button>
+          <button @click="orderList('position')"><span>⇩</span>PS</button>
+        </div>
         <div class="add-player">
           <button @click="addPlayer()"><span>+</span>Jogador</button>
         </div>
@@ -48,12 +83,12 @@ onMounted(() => {
 
       <div class="player-list" v-if="players.length > 0">
         <div class="player" v-for="(player, index) in players" :key="player.id">
-          <span class="p-monthly" @click="player.monthly = !player.monthly" :style="{ backgroundColor: player.monthly ? '#4E84EC' : '#EC4E4E' }" >{{ player.monthly ? 'MS' : 'AV' }} </span>
-          <span class="p-paid" @click="player.paid = !player.paid" :style="{ backgroundColor: player.paid ? '#0E8B48' : '#DF3636' }">$</span>
+          <span class="p-monthly" @click="player.monthly = !player.monthly" :style="{ backgroundColor: player.monthly ? '#4E84EC' : '#ecc84e' }" >{{ player.monthly ? 'MS' : 'AV' }} </span>
+          <!-- <span class="p-paid" @click="player.paid = !player.paid" :style="{ backgroundColor: player.paid ? '#0E8B48' : '#DF3636' }">$</span> -->
           <span class="p-name"><input type="text" v-model="player.name" placeholder="player" /></span>
           <span class="p-level"><StarsLevelComponent :player="player"></StarsLevelComponent></span>
           <span class="p-position" @click="togglePosition(player)" :style="{ backgroundColor: getBgPosition(player.position) }" >{{ player.position }}</span>
-          <span class="p-remove" @click="players.splice(index,1)"><img src="../assets/icons/lixeira.png" alt="lixera" width="19"></span>
+          <span class="p-remove" @click="removePlayer(index)"><img src="../assets/icons/lixeira.png" alt="lixera" width="19"></span>
         </div>
       </div>
       <div v-else>Nenhum jogador cadastrado!</div>
@@ -75,7 +110,7 @@ main {
   width: 100%;
   min-width: 300px;
   max-width: 400px;
-  /* background: #E6E6E6; */
+  padding: 0 5px;
 }
 
 /** ADD E FILTROS */
@@ -83,28 +118,36 @@ main {
   display: flex;
   justify-content: space-between;
   margin-bottom: 10px;
-  /* border: 1px solid white; 
-  border-radius: 20px;  */
 }
 
-/** Add Jogador */
+.actions button {
+  height: 35px;
+  cursor: pointer;
+}
+.actions button span {
+  font-size: 20px;
+  padding-right: 3px;
+}
 
-.add-player button {
+.actions .filters button {
+  margin-right: 5px;
+  border: 1px solid #999;
+  border-radius: 4px;
+}
+.actions .filters button span {
+  font-size: 15px;
+}
+
+.actions .add-player button {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: white;
-  border: none;
   border-radius: 4px;
+  border: none;
   font-weight: 500;
-  height: 35px;
-  padding: 0 10px;
-  cursor: pointer;
+  background: white;
   box-shadow: 1px 1px 2px #ababab;
-}
-.add-player button span {
-  font-size: 20px;
-  padding-right: 3px;
+  padding: 0 10px;
 }
 
 
@@ -124,7 +167,7 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 1px 3px;
+  margin: 1px 2px;
 }
 
 /** Mensalista */
