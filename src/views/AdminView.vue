@@ -112,7 +112,7 @@ main {
 
 .player {
   display: flex;
-  height: 35px;
+  height: 40px;
   margin: 5px 0;
   padding: 3px;
   background: #fff;
