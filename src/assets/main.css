@@ -12,6 +12,87 @@
   margin: 0 auto;
 }
 
+/** UTILS */
+
 .mt-10 {
   margin-top: 10px;
+}
+
+/** BASE WEBAPP MOBILE */
+
+/** Main Mobile */
+.main-mb {
+  display: flex;
+  justify-content: center;
+  margin: -5px 10px 0 10px;
+}
+
+.main-mb .container {
+  width: 100%;
+  min-width: 300px;
+  max-width: 400px;
+  padding: 0 5px;
+}
+
+/** Bloco Scroll :: Lista de jogadores */
+
+.player-list {
+  height: 500px;
+  overflow: auto;
+  padding: 0 5px;
+  background-color: #ddd;
+  border: 2px solid #999;
+  border-radius: 4px;
+}
+
+/** Listagem de Jogadores */
+
+.player {
+  display: flex;
+  height: 45px;
+  margin: 8px 0;
+  padding: 3px;
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 1px 1px 2px #ababab;
+}
+
+.player span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1px 2px;
+  font-weight: 900;
+}
+
+/** Mensalista & Posição & Pagamento & Confirmação */
+.p-toggle-btn {
+  min-width: 35px;
+  color: white;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/** Nome */
+.p-name {
+  width: 100%;
+  min-width: 100px;
+}
+
+.p-name input {
+  border: none;
+  background-color: #f5f5f5;
+  /* border-radius: 4px; */
+  outline: none;
+  width: inherit;
+  height: 30px;
+  border-radius: 25px;
+}
+
+
+/** Nível */
+.p-level {
+  justify-content: space-evenly !important;
+  min-width: 90px;
 }

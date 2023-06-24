@@ -4,6 +4,26 @@ import StarsLevelComponent from '../components/StarsLevelComponent.vue'
 
 const players = reactive([]);
 
+function getPlayers() {
+  players.push(
+    {"id":1,"paid":true,"name":"Player1","monthly":true,"level":3,"position":"AT", "status":1},
+    {"id":2,"paid":true,"name":"Player2","monthly":true,"level":2,"position":"AT", "status":1},
+    {"id":3,"paid":false,"name":"Player3","monthly":false,"level":4,"position":"MC", "status":1},
+    {"id":4,"paid":true,"name":"Player4","monthly":false,"level":1,"position":"MC", "status":1},
+    {"id":5,"paid":false,"name":"Player5","monthly":true,"level":1,"position":"ZG", "status":1},
+    {"id":6,"paid":true,"name":"Player6","monthly":true,"level":3,"position":"ZG", "status":1},
+    {"id":7,"paid":false,"name":"Player7","monthly":true,"level":1,"position":"ZG", "status":-1},
+    {"id":9,"paid":true,"name":"Player8","monthly":true,"level":3,"position":"AT", "status":0},
+    {"id":10,"paid":true,"name":"Player9","monthly":true,"level":3,"position":"MC", "status":1},
+    {"id":11,"paid":true,"name":"Player10","monthly":true,"level":1,"position":"MC", "status":1},
+    {"id":12,"paid":true,"name":"Player11","monthly":true,"level":2,"position":"ZG", "status":1},
+    {"id":13,"paid":true,"name":"Player12","monthly":true,"level":3,"position":"AT", "status":1},
+    {"id":14,"paid":true,"name":"Player13","monthly":true,"level":1,"position":"ZG", "status":1},
+    {"id":15,"paid":true,"name":"Player14","monthly":true,"level":2,"position":"MC", "status":1},
+  )
+  players.sort((a, b) => b.monthly - a.monthly)
+}
+
 function addPlayer() {
   players.push({"id":0,"paid":false,"name":"","monthly":true,"level":0,"position":"MC", "status":1});
   players.sort((a, b) => a.id - b.id)
@@ -56,29 +76,13 @@ function savePlayers() {
 }
 
 onMounted(() => {
-  players.push(
-    {"id":1,"paid":true,"name":"Player1","monthly":true,"level":3,"position":"AT", "status":1},
-    {"id":2,"paid":true,"name":"Player2","monthly":true,"level":2,"position":"AT", "status":1},
-    {"id":3,"paid":false,"name":"Player3","monthly":false,"level":4,"position":"MC", "status":1},
-    {"id":4,"paid":true,"name":"Player4","monthly":false,"level":1,"position":"MC", "status":1},
-    {"id":5,"paid":false,"name":"Player5","monthly":true,"level":1,"position":"ZG", "status":1},
-    {"id":6,"paid":true,"name":"Player6","monthly":true,"level":3,"position":"ZG", "status":1},
-    {"id":7,"paid":false,"name":"Player7","monthly":true,"level":1,"position":"ZG", "status":-1},
-    {"id":9,"paid":true,"name":"Player8","monthly":true,"level":3,"position":"AT", "status":0},
-    {"id":10,"paid":true,"name":"Player9","monthly":true,"level":3,"position":"MC", "status":1},
-    {"id":11,"paid":true,"name":"Player10","monthly":true,"level":1,"position":"MC", "status":1},
-    {"id":12,"paid":true,"name":"Player11","monthly":true,"level":2,"position":"ZG", "status":1},
-    {"id":13,"paid":true,"name":"Player12","monthly":true,"level":3,"position":"AT", "status":1},
-    {"id":14,"paid":true,"name":"Player13","monthly":true,"level":1,"position":"ZG", "status":1},
-    {"id":15,"paid":true,"name":"Player14","monthly":true,"level":2,"position":"MC", "status":1},
-  )
-  players.sort((a, b) => b.monthly - a.monthly)
+  getPlayers()
 })
 
 </script>
 
 <template>
-  <main>
+  <main class="main-mb">
     <div class="container">
       <div class="actions">
         <div class="filters">
@@ -99,11 +103,11 @@ onMounted(() => {
       <div class="player-list">
         <div v-if="players.length > 0">
           <div class="player" v-for="(player, index) in players" :key="player.id">
-            <span class="p-monthly" @click="player.monthly = !player.monthly" :style="{ backgroundColor: player.monthly ? '#4E84EC' : '#ecc84e' }" >{{ player.monthly ? 'MS' : 'AV' }} </span>
+            <span class="p-toggle-btn" @click="player.monthly = !player.monthly" :style="{ backgroundColor: player.monthly ? '#4E84EC' : '#ecc84e' }" >{{ player.monthly ? 'MS' : 'AV' }} </span>
             <!-- <span class="p-paid" @click="player.paid = !player.paid" :style="{ backgroundColor: player.paid ? '#0E8B48' : '#DF3636' }">$</span> -->
             <span class="p-name"><input type="text" v-model="player.name" placeholder="Jogador" /></span>
             <span class="p-level"><StarsLevelComponent :player="player"></StarsLevelComponent></span>
-            <span class="p-position" @click="togglePosition(player)" :style="{ backgroundColor: getBgPosition(player.position) }" >{{ player.position }}</span>
+            <span class="p-toggle-btn" @click="togglePosition(player)" :style="{ backgroundColor: getBgPosition(player.position) }" >{{ player.position }}</span>
             <span class="p-remove" @click="removePlayer(index)"><img src="../assets/icons/lixeira.png" alt="lixera" width="19"></span>
           </div>
         </div>
@@ -113,29 +117,13 @@ onMounted(() => {
       <div class="save" v-if="players.length > 0">
         <button @click="savePlayers()" :disabled="players.filter(p => p.level === 0 || !p.name).length > 0">SALVAR</button>
       </div>
-      
     </div>
-
 </main>
 </template>
 
 <style scoped>
 
-/** BODY */
-main {
-  display: flex;
-  justify-content: center;
-  margin: -5px 10px 0 10px;
-}
-
-.container {
-  width: 100%;
-  min-width: 300px;
-  max-width: 400px;
-  padding: 0 5px;
-}
-
-/** ADD E FILTROS */
+/** Filtros e Add Jogador */
 .actions {
   display: flex;
   justify-content: space-between;
@@ -146,6 +134,7 @@ main {
   height: 40px;
   cursor: pointer;
 }
+
 .actions button span {
   font-size: 20px;
   padding-right: 3px;
@@ -162,6 +151,15 @@ main {
   font-size: 15px;
 }
 
+.filter-selected {
+  border: 2px solid #27ae60 !important;
+}
+
+.filter-selected span {
+  color: #27ae60;
+  font-weight: 600;
+}
+
 .actions .add-player button {
   display: flex;
   justify-content: center;
@@ -174,23 +172,19 @@ main {
   padding: 0 10px;
 }
 
-.filter-selected {
-  border: 2px solid #27ae60 !important;
-}
-.filter-selected span {
-  color: #27ae60;
-  font-weight: 600;
-}
+/** Listagem de Jogadores */
 
-.player-list {
-  height: 500px;
-  overflow: auto;
-  padding: 0 5px;
-  background-color: #ddd;
-  border: 2px solid #999;
+/** Remover Jogador */
+.p-remove {
+  min-width: 10px;
+  font-weight: bold;
+  background: #f5f5f5;
+  padding: 0px 8px;
   border-radius: 4px;
+  cursor: pointer;
 }
 
+/** Botão Salvar */
 .save button {
   margin-top: 10px;
   padding: 8px 0;
@@ -207,86 +201,6 @@ main {
 .save button[disabled] {
   background-color: #27ae609e;
   cursor: auto;
-}
-
-/** Listagem de Jogadores */
-
-.player {
-  display: flex;
-  height: 45px;
-  margin: 8px 0;
-  padding: 3px;
-  background: #fff;
-  border-radius: 4px;
-  box-shadow: 1px 1px 2px #ababab;
-}
-
-.player span {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 1px 2px;
-  font-weight: 900;
-}
-
-/** Mensalista */
-.p-monthly {
-  min-width: 35px;
-  color: white;
-  font-weight: bold;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-
-/** Pagamento */
-.p-paid {
-  min-width: 30px;
-  color: white;
-  font-weight: bold;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-/** Nome */
-.p-name {
-  width: 100%;
-  min-width: 100px;
-}
-
-.p-name input {
-  border: none;
-  background-color: #f5f5f5;
-  /* border-radius: 4px; */
-  outline: none;
-  width: inherit;
-  height: 30px;
-  border-radius: 25px;
-}
-
-/** Posição */
-.p-position {
-  min-width: 35px;
-  color: white;
-  font-weight: bold;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-/** Nível */
-.p-level {
-  justify-content: space-evenly !important;
-  min-width: 90px;
-}
-
-/** Remover */
-.p-remove {
-  min-width: 10px;
-  font-weight: bold;
-  background: #f5f5f5;
-  padding: 0px 8px;
-  border-radius: 4px;
-  cursor: pointer;
 }
 
 </style>

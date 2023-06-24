@@ -4,7 +4,7 @@
 <template>
   <nav class="fixed-bar">
     <div class="title-futsort">FutSort</div>
-    <span class="version">v0.4</span>
+    <span class="version">v0.5</span>
   </nav>
 </template>
 
