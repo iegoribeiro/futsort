@@ -26,8 +26,8 @@ function removePlayer(index) {
   players.splice(index,1);
 }
 
-const lastSorted = ref("name");
-const isDescending = ref(false);
+const lastSorted = ref("monthly");
+const isDescending = ref(true);
 
 function orderList(attribute) {
   if (attribute === lastSorted.value) {
@@ -71,10 +71,14 @@ onMounted(() => {
     <div class="container">
       <div class="actions">
         <div class="filters">
-          <button @click="orderList('monthly')"><span>⇩</span>MS</button>
-          <button @click="orderList('name')"><span>⇩</span>NM</button>
-          <button @click="orderList('level')"><span>⇩</span>LV</button>
-          <button @click="orderList('position')"><span>⇩</span>PS</button>
+          <button @click="orderList('monthly')" :class="{ 'filter-selected': lastSorted === 'monthly' }">
+            <span>{{ lastSorted === 'monthly' && isDescending ? '⇓' : '⇑' }}</span>Ms</button>
+          <button @click="orderList('name')" :class="{ 'filter-selected': lastSorted === 'name' }">
+            <span>{{ lastSorted === 'name' && isDescending ? '⇓' : '⇑' }}</span>Nm</button>
+          <button @click="orderList('level')" :class="{ 'filter-selected': lastSorted === 'level' }">
+            <span>{{ lastSorted === 'level' && isDescending ? '⇓' : '⇑' }}</span>Lv</button>
+          <button @click="orderList('position')" :class="{ 'filter-selected': lastSorted === 'position' }">
+            <span>{{ lastSorted === 'position' && isDescending ? '⇓' : '⇑' }}</span>Ps</button>
         </div>
         <div class="add-player">
           <button @click="addPlayer()"><span>+</span>Jogador</button>
@@ -85,7 +89,7 @@ onMounted(() => {
         <div class="player" v-for="(player, index) in players" :key="player.id">
           <span class="p-monthly" @click="player.monthly = !player.monthly" :style="{ backgroundColor: player.monthly ? '#4E84EC' : '#ecc84e' }" >{{ player.monthly ? 'MS' : 'AV' }} </span>
           <!-- <span class="p-paid" @click="player.paid = !player.paid" :style="{ backgroundColor: player.paid ? '#0E8B48' : '#DF3636' }">$</span> -->
-          <span class="p-name"><input type="text" v-model="player.name" placeholder="player" /></span>
+          <span class="p-name"><input type="text" v-model="player.name" placeholder="Jogador" /></span>
           <span class="p-level"><StarsLevelComponent :player="player"></StarsLevelComponent></span>
           <span class="p-position" @click="togglePosition(player)" :style="{ backgroundColor: getBgPosition(player.position) }" >{{ player.position }}</span>
           <span class="p-remove" @click="removePlayer(index)"><img src="../assets/icons/lixeira.png" alt="lixera" width="19"></span>
@@ -121,7 +125,7 @@ main {
 }
 
 .actions button {
-  height: 35px;
+  height: 40px;
   cursor: pointer;
 }
 .actions button span {
@@ -133,7 +137,9 @@ main {
   margin-right: 5px;
   border: 1px solid #999;
   border-radius: 4px;
+  font-weight: 500;
 }
+
 .actions .filters button span {
   font-size: 15px;
 }
@@ -150,13 +156,21 @@ main {
   padding: 0 10px;
 }
 
+.filter-selected {
+  border: 2px solid #27ae60 !important;
+}
+.filter-selected span {
+  color: #27ae60;
+  font-weight: 600;
+}
+
 
 /** Listagem de Jogadores */
 
 .player {
   display: flex;
-  height: 40px;
-  margin: 5px 0;
+  height: 45px;
+  margin: 8px 0;
   padding: 3px;
   background: #fff;
   border-radius: 4px;
@@ -168,11 +182,12 @@ main {
   align-items: center;
   justify-content: center;
   margin: 1px 2px;
+  font-weight: 900;
 }
 
 /** Mensalista */
 .p-monthly {
-  min-width: 30px;
+  min-width: 35px;
   color: white;
   font-weight: bold;
   border-radius: 4px;
@@ -198,14 +213,16 @@ main {
 .p-name input {
   border: none;
   background-color: #f5f5f5;
-  border-radius: 25px;
+  /* border-radius: 4px; */
   outline: none;
   width: inherit;
+  height: 30px;
+  border-radius: 25px;
 }
 
 /** Posição */
 .p-position {
-  min-width: 30px;
+  min-width: 35px;
   color: white;
   font-weight: bold;
   border-radius: 4px;

@@ -18,4 +18,7 @@ import FixedBar from './components/FixedBar.vue'
 </template>
 
 <style scoped>
+header {
+  margin-top: 40px;
+}
 </style>

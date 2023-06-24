@@ -1,9 +1,11 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 import JogarView from '../views/JogarView.vue'
+import AdminView from '../views/AdminView.vue'
 import MensalidadeView from '../views/MensalidadeView.vue'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  //createWebHistory -> Remover # da rota, usar .htaccess
+  history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
@@ -13,10 +15,9 @@ const router = createRouter({
     {
       path: '/admin',
       name: 'admin',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
+      component: AdminView
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AdminView.vue')
+      // component: () => import('../views/AdminView.vue')
     },
     {
       path: '/mensalidade',
