@@ -18,6 +18,10 @@
   margin-top: 10px;
 }
 
+.rotate-180 {
+  transform: rotate(180deg);
+}
+
 /** BASE WEBAPP MOBILE */
 
 /** Main Mobile */
@@ -72,6 +76,11 @@
   font-weight: bold;
   border-radius: 4px;
   cursor: pointer;
+  user-select: none;
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Versões antigas do Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
 }
 
 /** Nome */
@@ -96,3 +105,4 @@
   justify-content: space-evenly !important;
   min-width: 90px;
 }
+

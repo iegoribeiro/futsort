@@ -6,20 +6,30 @@ const players = reactive([]);
 
 function getPlayers() {
   players.push(
-    {"id":1,"paid":true,"name":"Player1","monthly":true,"level":3,"position":"AT", "status":1},
-    {"id":2,"paid":true,"name":"Player2","monthly":true,"level":2,"position":"AT", "status":1},
-    {"id":3,"paid":false,"name":"Player3","monthly":false,"level":4,"position":"MC", "status":1},
-    {"id":4,"paid":true,"name":"Player4","monthly":false,"level":1,"position":"MC", "status":1},
-    {"id":5,"paid":false,"name":"Player5","monthly":true,"level":1,"position":"ZG", "status":1},
-    {"id":6,"paid":true,"name":"Player6","monthly":true,"level":3,"position":"ZG", "status":1},
-    {"id":7,"paid":false,"name":"Player7","monthly":true,"level":1,"position":"ZG", "status":-1},
-    {"id":9,"paid":true,"name":"Player8","monthly":true,"level":3,"position":"AT", "status":0},
-    {"id":10,"paid":true,"name":"Player9","monthly":true,"level":3,"position":"MC", "status":1},
-    {"id":11,"paid":true,"name":"Player10","monthly":true,"level":1,"position":"MC", "status":1},
-    {"id":12,"paid":true,"name":"Player11","monthly":true,"level":2,"position":"ZG", "status":1},
-    {"id":13,"paid":true,"name":"Player12","monthly":true,"level":3,"position":"AT", "status":1},
-    {"id":14,"paid":true,"name":"Player13","monthly":true,"level":1,"position":"ZG", "status":1},
-    {"id":15,"paid":true,"name":"Player14","monthly":true,"level":2,"position":"MC", "status":1},
+    {"id":1,"name":"Arlindo","monthly":true,"level":4,"position":"MC", "status":1},
+    {"id":2,"name":"Paulo","monthly":true,"level":4,"position":"MC", "status":1},
+    {"id":3,"name":"Wendel","monthly":true,"level":4,"position":"ZG", "status":1},
+    {"id":4,"name":"Marreta","monthly":true,"level":4,"position":"ZG", "status":1},
+    {"id":5,"name":"Nicolas Vini","monthly":true,"level":3,"position":"AT", "status":1},
+    {"id":6,"name":"Iego","monthly":true,"level":3,"position":"AT", "status":1},
+    {"id":7,"name":"Pr. Marcel","monthly":true,"level":3,"position":"MC", "status":1},
+    {"id":8,"name":"Nycolas","monthly":true,"level":3,"position":"MC", "status":1},
+    {"id":9,"name":"Vitor","monthly":true,"level":3,"position":"MC", "status":1},
+    {"id":10,"name":"Rafael","monthly":true,"level":3,"position":"MC", "status":1},
+    {"id":11,"name":"Silvio","monthly":true,"level":3,"position":"ZG", "status":1},
+    {"id":12,"name":"Dudu","monthly":true,"level":3,"position":"ZG", "status":1},
+    {"id":13,"name":"Kaka","monthly":true,"level":3,"position":"ZG", "status":1},
+    {"id":14,"name":"Leleco","monthly":true,"level":2,"position":"AT", "status":1},
+    {"id":15,"name":"Daniel","monthly":true,"level":2,"position":"AT", "status":1},
+    {"id":16,"name":"Wagner","monthly":true,"level":2,"position":"ZG", "status":1},
+    {"id":17,"name":"Thiago Campos","monthly":true,"level":2,"position":"ZG", "status":1},
+    {"id":18,"name":"Rodrigo Bonfatti","monthly":true,"level":2,"position":"MC", "status":1}, /** DESCONHEÇO */
+    {"id":19,"name":"Rodrigo Souza","monthly":true,"level":2,"position":"MC", "status":1}, /** DESCONHEÇO */
+    {"id":20,"name":"Gustavo","monthly":true,"level":2,"position":"MC", "status":1}, /** DESCONHEÇO */
+    {"id":21,"name":"Alex","monthly":true,"level":2,"position":"ZG", "status":1}, /** DESCONHEÇO */
+    {"id":22,"name":"Allan","monthly":true,"level":1,"position":"AT", "status":1},
+    {"id":23,"name":"Thiago Jr","monthly":true,"level":1,"position":"AT", "status":1},
+    {"id":24,"name":"Edinho","monthly":true,"level":1,"position":"ZG", "status":1}  
   )
   players.sort((a, b) => b.monthly - a.monthly)
 }
@@ -138,6 +148,7 @@ onMounted(() => {
 .actions button span {
   font-size: 20px;
   padding-right: 3px;
+  user-select: none;
 }
 
 .actions .filters button {
