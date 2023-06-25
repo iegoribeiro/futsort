@@ -3,12 +3,7 @@ import { reactive, onMounted, ref } from 'vue';
 import StarsLevelComponent from '../components/StarsLevelComponent.vue'
 
 const players = reactive([]);
-
-var sortedTeams = reactive([]);
-var sortedTeam1 = reactive([]);
-var sortedTeam2 = reactive([]);
-var sortedTeam3 = reactive([]);
-var sortedTeam4 = reactive([]);
+var sortedTeams = reactive([[], [], [], []]);
 
 const raffleDone = ref(false)
 
@@ -18,27 +13,26 @@ function getPlayers() {
     {"id":2,"name":"Paulo","monthly":true,"level":4,"position":"MC", "status":1},
     {"id":3,"name":"Wendel","monthly":true,"level":4,"position":"ZG", "status":1},
     {"id":4,"name":"Marreta","monthly":true,"level":4,"position":"ZG", "status":1},
+    {"id":5,"name":"Silvio","monthly":true,"level":4,"position":"ZG", "status":1},
 
-    {"id":5,"name":"Nicolas Vini","monthly":true,"level":3,"position":"AT", "status":1},
     {"id":6,"name":"Iego","monthly":true,"level":3,"position":"AT", "status":1},
-    {"id":7,"name":"Pr. Marcel","monthly":true,"level":3,"position":"MC", "status":1},
+    {"id":7,"name":"Nicolas Vini","monthly":true,"level":3,"position":"AT", "status":1},
     {"id":8,"name":"Nycolas","monthly":true,"level":3,"position":"MC", "status":1},
     {"id":9,"name":"Vitor","monthly":true,"level":3,"position":"MC", "status":1},
     {"id":10,"name":"Rafael","monthly":true,"level":3,"position":"MC", "status":1},
-    {"id":11,"name":"Silvio","monthly":true,"level":3,"position":"ZG", "status":1},
+    {"id":11,"name":"Pr. Marcel","monthly":true,"level":3,"position":"MC", "status":1},
     {"id":12,"name":"Dudu","monthly":true,"level":3,"position":"ZG", "status":1},
-    {"id":13,"name":"Kaka","monthly":true,"level":3,"position":"ZG", "status":1},
     
-    {"id":14,"name":"Leleco","monthly":true,"level":2,"position":"AT", "status":1},
-    {"id":15,"name":"Daniel","monthly":true,"level":2,"position":"AT", "status":1},
+    {"id":13,"name":"Leleco","monthly":true,"level":2,"position":"AT", "status":1},
+    {"id":14,"name":"Daniel","monthly":true,"level":2,"position":"AT", "status":1},
+    {"id":15,"name":"Kaka","monthly":true,"level":2,"position":"ZG", "status":1},
     {"id":16,"name":"Wagner","monthly":true,"level":2,"position":"ZG", "status":1},
     {"id":17,"name":"Thiago Campos","monthly":true,"level":2,"position":"ZG", "status":1},
+    {"id":18,"name":"Rodrigo Bonfatti","monthly":true,"level":2,"position":"ZG", "status":1},
     
-    /** DESCONHEÇO */
-    {"id":18,"name":"Rodrigo Bonfatti","monthly":true,"level":2,"position":"MC", "status":1},
-    {"id":19,"name":"Rodrigo Souza","monthly":true,"level":2,"position":"MC", "status":1},
-    {"id":20,"name":"Gustavo","monthly":true,"level":2,"position":"MC", "status":1},
-    {"id":21,"name":"Alex","monthly":true,"level":2,"position":"ZG", "status":1},
+    {"id":19,"name":"Rodrigo Souza","monthly":true,"level":2,"position":"MC", "status":1}, /** DESCONHEÇO */
+    {"id":20,"name":"Gustavo","monthly":true,"level":2,"position":"MC", "status":1}, /** DESCONHEÇO */
+    {"id":21,"name":"Alex","monthly":true,"level":2,"position":"ZG", "status":1}, /**ZG*/ /** DESCONHEÇO */
     
     {"id":22,"name":"Allan","monthly":true,"level":1,"position":"AT", "status":1},
     {"id":23,"name":"Thiago Jr","monthly":true,"level":1,"position":"AT", "status":1},
@@ -69,21 +63,19 @@ const raffleTeams = () => {
   midfielders.sort((a, b) => b.level - a.level);
   defenders.sort((a, b) => b.level - a.level);
 
-  const teams = [[], [], [], []];
-
   const assignPlayerToTeam = (player) => {
     let minTeamIndex = 0;
-    let minTeamWeight = calculateTeamWeight(teams[0]);
+    let minTeamWeight = calculateTeamWeight(sortedTeams[0]);
 
-    for (let i = 1; i < teams.length; i++) {
-      const teamWeight = calculateTeamWeight(teams[i]);
+    for (let i = 1; i < sortedTeams.length; i++) {
+      const teamWeight = calculateTeamWeight(sortedTeams[i]);
       if (teamWeight < minTeamWeight) {
         minTeamIndex = i;
         minTeamWeight = teamWeight;
       }
     }
 
-    teams[minTeamIndex].push(player);
+    sortedTeams[minTeamIndex].push(player);
   };
 
   while (attackers.length > 0 || midfielders.length > 0 || defenders.length > 0) {
@@ -104,16 +96,7 @@ const raffleTeams = () => {
     return totalLevel;
   }
 
-  sortedTeams = teams;
-  // sortedTeam1 = teams[0]
-  // sortedTeam2 = teams[1]
-  // sortedTeam3 = teams[2]
-  // sortedTeam4 = teams[3]
-
-  console.log(sortedTeams);
-
   raffleDone.value = true;
-  return teams;
 }
 
 const saveRuffle = (players) => {
@@ -149,7 +132,7 @@ onMounted(() => {
                 {{ player.status >= 0 ? player.status === 1 ? '✔' : '✘' : "?" }}
               </span>
               <span class="p-name"><input type="text" v-model="player.name" placeholder="Jogador" disabled/></span>
-              <span class="p-level"><StarsLevelComponent :player="player" :width="15"></StarsLevelComponent></span>
+              <span class="p-level"><StarsLevelComponent :player="player" :width="15" :disabled="true"></StarsLevelComponent></span>
               <span class="p-toggle-btn" :style="{ backgroundColor: player.monthly ? '#4E84EC' : '#ecc84e' }" >{{ player.monthly ? 'MS' : 'AV' }} </span>
               <span class="p-toggle-btn" :style="{ backgroundColor: getBgPosition(player.position) }" >{{ player.position }}</span>
             </div>
@@ -164,7 +147,7 @@ onMounted(() => {
             </div>
             <div class="player" v-for="(player) in team" :key="player.id">
               <span class="p-name"><input type="text" v-model="player.name" placeholder="Jogador" disabled/></span>
-              <span class="p-level"><StarsLevelComponent :player="player" :width="15"></StarsLevelComponent></span>
+              <span class="p-level"><StarsLevelComponent :player="player" :width="15" :disabled="true"></StarsLevelComponent></span>
               <span class="p-toggle-btn" :style="{ backgroundColor: player.monthly ? '#4E84EC' : '#ecc84e' }" >{{ player.monthly ? 'MS' : 'AV' }} </span>
               <span class="p-toggle-btn" :style="{ backgroundColor: getBgPosition(player.position) }" >{{ player.position }}</span>
             </div>

@@ -92,7 +92,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <main class="main-mb">
+  <main class="main-mb" id="admin">
     <div class="container">
       <div class="actions">
         <div class="filters">
@@ -184,6 +184,10 @@ onMounted(() => {
 }
 
 /** Listagem de Jogadores */
+
+#admin .p-level svg {
+  cursor: pointer;
+}
 
 /** Remover Jogador */
 .p-remove {
