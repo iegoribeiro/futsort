@@ -8,8 +8,14 @@
   text-align: center;
 }
 
+/** GLOBAL */
+
 #app {
   margin: 0 auto;
+}
+
+button:active {
+  box-shadow: 0 0 1px #555 !important;
 }
 
 /** UTILS */
