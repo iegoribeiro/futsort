@@ -1,11 +1,13 @@
 <script setup>
 import { reactive, onMounted, ref } from 'vue';
 import StarsLevelComponent from '../components/StarsLevelComponent.vue'
+import PopupComponent from '../components/PopupComponent.vue';
 
 const players = reactive([]);
-var sortedTeams = reactive([[], [], [], []]);
+const sortedTeams = reactive([[], [], [], []]);
 
 const raffleDone = ref(false)
+const popupShow = ref(true)
 
 function getPlayers() {
   players.push(
@@ -48,6 +50,8 @@ function getBgPosition(position) {
 }
 
 function confirm () {
+
+
   //TODO :: API -> UPDATE CONFIRMAÇÃO!
   console.log(players);
 }
@@ -109,7 +113,6 @@ onMounted(() => {
 </script>
 
 <template>
-  
   <main class="main-mb" id="jogar">
     <div class="container">
 
@@ -161,6 +164,12 @@ onMounted(() => {
       </div>
 
     </div>
+    <PopupComponent v-if="popupShow"
+      @no="popupShow = false"
+      @yes="popupShow = true"
+      :title="'Deseja realmente continuar?'" 
+      :msg="'Você está prestes a salvar os registros.'">
+    </PopupComponent>
   </main>
 </template>
 

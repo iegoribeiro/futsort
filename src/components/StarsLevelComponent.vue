@@ -33,8 +33,4 @@ defineProps({
   cursor: pointer;
 }
 
-/* svg {
-  cursor: pointer;
-} */
-
 </style>

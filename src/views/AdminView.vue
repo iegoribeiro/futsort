@@ -35,7 +35,7 @@ function getPlayers() {
 }
 
 function addPlayer() {
-  players.push({"id":0,"paid":false,"name":"","monthly":true,"level":0,"position":"MC", "status":1});
+  players.push({"id":0,"name":"","monthly":true,"level":0,"position":"MC", "status":1});
   players.sort((a, b) => a.id - b.id)
 }
 
