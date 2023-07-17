@@ -2,44 +2,16 @@
 import { reactive, onMounted, ref } from 'vue';
 import StarsLevelComponent from '../components/StarsLevelComponent.vue'
 import PopupComponent from '../components/PopupComponent.vue';
+import { findPlayers } from '../services/players.js';
 
 const players = reactive([]);
-const sortedTeams = reactive([[], [], [], []]);
+const sortedTeams = reactive([]);
 
 const raffleDone = ref(false)
-const popupShow = ref(true)
+const popupShow = ref(false)
 
 function getPlayers() {
-  players.push(
-    {"id":1,"name":"Arlindo","monthly":true,"level":4,"position":"MC", "status":1},
-    {"id":2,"name":"Paulo","monthly":true,"level":4,"position":"MC", "status":1},
-    {"id":3,"name":"Wendel","monthly":true,"level":4,"position":"ZG", "status":1},
-    {"id":4,"name":"Marreta","monthly":true,"level":4,"position":"ZG", "status":1},
-    {"id":5,"name":"Silvio","monthly":true,"level":4,"position":"ZG", "status":1},
-
-    {"id":6,"name":"Iego","monthly":true,"level":3,"position":"AT", "status":1},
-    {"id":7,"name":"Nicolas Vini","monthly":true,"level":3,"position":"AT", "status":1},
-    {"id":8,"name":"Nycolas","monthly":true,"level":3,"position":"MC", "status":1},
-    {"id":9,"name":"Vitor","monthly":true,"level":3,"position":"MC", "status":1},
-    {"id":10,"name":"Rafael","monthly":true,"level":3,"position":"MC", "status":1},
-    {"id":11,"name":"Pr. Marcel","monthly":true,"level":3,"position":"MC", "status":1},
-    {"id":12,"name":"Dudu","monthly":true,"level":3,"position":"ZG", "status":1},
-    
-    {"id":13,"name":"Leleco","monthly":true,"level":2,"position":"AT", "status":1},
-    {"id":14,"name":"Daniel","monthly":true,"level":2,"position":"AT", "status":1},
-    {"id":15,"name":"Kaka","monthly":true,"level":2,"position":"ZG", "status":1},
-    {"id":16,"name":"Wagner","monthly":true,"level":2,"position":"ZG", "status":1},
-    {"id":17,"name":"Thiago Campos","monthly":true,"level":2,"position":"ZG", "status":1},
-    {"id":18,"name":"Rodrigo Bonfatti","monthly":true,"level":2,"position":"ZG", "status":1},
-    
-    {"id":19,"name":"Rodrigo Souza","monthly":true,"level":2,"position":"MC", "status":1}, /** DESCONHEÇO */
-    {"id":20,"name":"Gustavo","monthly":true,"level":2,"position":"MC", "status":1}, /** DESCONHEÇO */
-    {"id":21,"name":"Alex","monthly":true,"level":2,"position":"ZG", "status":1}, /**ZG*/ /** DESCONHEÇO */
-    
-    {"id":22,"name":"Allan","monthly":true,"level":1,"position":"AT", "status":1},
-    {"id":23,"name":"Thiago Jr","monthly":true,"level":1,"position":"AT", "status":1},
-    {"id":24,"name":"Edinho","monthly":true,"level":1,"position":"ZG", "status":1}    
-  )
+  players.push(...findPlayers())
   players.sort((a, b) => a.name.localeCompare(b.name))
 }
 
@@ -49,61 +21,86 @@ function getBgPosition(position) {
   if (position == "ZG") return "#DE9F54"
 }
 
-function confirm () {
-
-
+function confirmPlayer () {
   //TODO :: API -> UPDATE CONFIRMAÇÃO!
   console.log(players);
+  popupShow.value=false
 }
 
-const raffleTeams = () => {
-  console.log("START SORTEIO!!");
+/*********** FUNÇÕES AUXILIARES PARA O SORTEIO *************/
 
-  const attackers = players.filter(player => player.position === 'AT');
-  const midfielders = players.filter(player => player.position === 'MC');
-  const defenders = players.filter(player => player.position === 'ZG');
+function buildSortedTeams(inPlayers) {
+  const qtyTeams = Math.floor(inPlayers.length / 6);
+  const remainingPlayers = inPlayers.length % 6;
 
-  attackers.sort((a, b) => b.level - a.level);
-  midfielders.sort((a, b) => b.level - a.level);
-  defenders.sort((a, b) => b.level - a.level);
+  if (qtyTeams < 2) return null
 
-  const assignPlayerToTeam = (player) => {
-    let minTeamIndex = 0;
-    let minTeamWeight = calculateTeamWeight(sortedTeams[0]);
+  let inSortedTeams = Array.from({ length: qtyTeams }, () => Array(6).fill({}));
 
-    for (let i = 1; i < sortedTeams.length; i++) {
-      const teamWeight = calculateTeamWeight(sortedTeams[i]);
-      if (teamWeight < minTeamWeight) {
-        minTeamIndex = i;
-        minTeamWeight = teamWeight;
-      }
-    }
+  if (remainingPlayers > 0) inSortedTeams.push(Array(remainingPlayers).fill({}));
+  return inSortedTeams;
+}
 
-    sortedTeams[minTeamIndex].push(player);
-  };
-
-  while (attackers.length > 0 || midfielders.length > 0 || defenders.length > 0) {
-    if (attackers.length >= 1) {
-      const player = attackers.shift();
-      assignPlayerToTeam(player);
-    } else if (midfielders.length >= 1) {
-      const player = midfielders.shift();
-      assignPlayerToTeam(player);
-    } else if (defenders.length >= 1) {
-      const player = defenders.shift();
-      assignPlayerToTeam(player);
-    }
+function sortPlayer(inPlayers, level, team) {
+  
+  function getOrderedPositionByTeamNeed(currTeam) {
+    let positions = ["ZG", "MC", "AT"];
+    return positions.sort((a, b) => currTeam.filter(p => p.position === a).length - currTeam.filter(player => player.position === b).length);
   }
 
-  function calculateTeamWeight(team) {
-    const totalLevel = team.reduce((sum, player) => sum + player.level, 0);
-    return totalLevel;
+  let filteredPlayers = inPlayers.filter(p => p.level === level && !p.selected);
+  if (!filteredPlayers || filteredPlayers.length <= 0) return null;
+
+  filteredPlayers.sort(() => Math.random() - 0.5);
+  let ordPos = getOrderedPositionByTeamNeed(team)
+  filteredPlayers.sort((a, b) => ordPos.indexOf(a.position) - ordPos.indexOf(b.position));
+
+  return filteredPlayers[0];
+}
+
+/***********************************************************/
+
+const raffleTeams = () => {
+  const playersToPlay = players.filter(p => p.status === 1).map(p => ({...p, selected: false}));
+  sortedTeams.push(...buildSortedTeams(playersToPlay))
+
+  if (!sortedTeams) {
+    alert("Não foi possível formar 2 times!")
+    return
+  }
+
+  var iLvl = 5;
+
+  while (iLvl > 0) {
+
+    //Ordenar os times ainda não completos por level
+    let weakerTeam = sortedTeams
+      .filter(team => team.some(player => Object.keys(player).length === 0))
+      .sort((a,b) => (a.reduce((sum, p) => sum + (p.level ? p.level : 0), 0)) - (b.reduce((sum, p) => sum + (p.level ? p.level : 0), 0)))
+      [0];
+
+    //buscar jogador por level considerando a posição que o time precisa
+    let player = sortPlayer(playersToPlay, iLvl, weakerTeam)
+
+    if (player) {
+      let nextEmptyIndex = weakerTeam.findIndex(wt => Object.keys(wt).length === 0); 
+      weakerTeam[nextEmptyIndex] = player;
+  
+      //Tornar jogador selecionado
+      playersToPlay[playersToPlay.findIndex(pl => pl == player)].selected = true;
+    }
+    
+    //Reduzir level após todos os jogadores do level atual serem escalados
+    if (!player || !playersToPlay.some(p => p.level === iLvl && !p.selected)) {
+      iLvl--;
+    }
   }
 
   raffleDone.value = true;
 }
 
 const saveRuffle = (players) => {
+  
 }
 
 onMounted(() => {
@@ -118,7 +115,7 @@ onMounted(() => {
 
       <div class="actions">
         <div class="confirm" v-if="!raffleDone">
-          <button @click="confirm()"><span>⚽</span>Confirmar</button>
+          <button @click="popupShow=true"><span>⚽</span>Confirmar</button>
         </div>
         <div class="after-raffle" v-else>
           <button @click="raffleDone=false"><i></i>Voltar</button>
@@ -162,13 +159,10 @@ onMounted(() => {
       <div class="ruffle" v-if="players.length > 0 && !raffleDone"> <!-- TODO :: && isAdmin -->
         <button @click="raffleTeams()" :disabled="players.filter(p => p.status === -1).length > 0">SORTEAR</button>
       </div>
-
     </div>
+
     <PopupComponent v-if="popupShow"
-      @no="popupShow = false"
-      @yes="popupShow = true"
-      :title="'Deseja realmente continuar?'" 
-      :msg="'Você está prestes a salvar os registros.'">
+      @no="popupShow=false" @yes="confirmPlayer()" :title="'Deseja prosseguir?'" :icon="'question'" >
     </PopupComponent>
   </main>
 </template>
@@ -251,10 +245,7 @@ onMounted(() => {
 }
 
 #jogar .p-level {
-  min-width: 40px;
-}
-
-#jogar .p-level {
+  min-width: 45px;
   flex-wrap: wrap;
   align-items: flex-start;
 }
