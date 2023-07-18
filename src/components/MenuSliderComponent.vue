@@ -7,7 +7,7 @@ import { RouterLink } from 'vue-router'
     <nav class="menu">
       <RouterLink class="menu-item" to="/admin" >Admin</RouterLink>
       <RouterLink class="menu-item active" to="/">Jogar</RouterLink>
-      <RouterLink class="menu-item" to="/mensalidade">Mensalidade</RouterLink>
+      <RouterLink class="menu-item" to="/financeiro">Financeiro</RouterLink>
       <div class="menu-slide"></div>
     </nav>
   </div>

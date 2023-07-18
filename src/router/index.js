@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 import JogarView from '../views/JogarView.vue'
 import AdminView from '../views/AdminView.vue'
-import MensalidadeView from '../views/MensalidadeView.vue'
+import FinanceiroView from '../views/FinanceiroView.vue'
 
 const router = createRouter({
   //createWebHistory -> Remover # da rota, usar .htaccess
@@ -20,9 +20,9 @@ const router = createRouter({
       // component: () => import('../views/AdminView.vue')
     },
     {
-      path: '/mensalidade',
-      name: 'mensalidade',
-      component: MensalidadeView
+      path: '/financeiro',
+      name: 'financeiro',
+      component: FinanceiroView
     },
   ]
 })
